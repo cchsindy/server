@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <div id="files"></div>
+</head>
+<body>
+<script>
+fetch('https://covenant.nyc3.digitaloceanspaces.com/', {
+  method: 'GET',
+  mode: 'no-cors',
+  headers: {
+    'Content-Type': 'application/xml'
+  }
+})
+  .then(response => {
+    response.text()
+      .then(xml => {
+        console.log('xml =>', xml)
+      })
+  })
+</script>
+</body>
+</html>
