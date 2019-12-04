@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
-    "xml-js": "^1.6.11"
+    "express": "^4.17.1"
   }
 }
