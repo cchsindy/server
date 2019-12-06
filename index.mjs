@@ -12,7 +12,7 @@ app.post('/spaces', (req, res) => {
   const spaces = new SpacesService
   spaces.getFileList(req.params.directory)
   .then(list => {
-    res.json(JSON.stringify(list))
+    res.json(list)
   })
 })
 
