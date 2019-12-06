@@ -9,17 +9,16 @@
 </head>
 <body>
 <script>
-fetch('https://covenant.nyc3.digitaloceanspaces.com/', {
-  method: 'GET',
-  mode: 'no-cors',
-  headers: {
-    'Content-Type': 'application/xml'
+fetch('http://localhost:3000/spaces', {
+  method: 'POST',
+  params: {
+    directory: 'library-tv'
   }
 })
   .then(response => {
-    response.text()
-      .then(xml => {
-        console.log('xml =>', xml)
+    response.json()
+      .then(files => {
+        console.log(files)
       })
   })
 </script>

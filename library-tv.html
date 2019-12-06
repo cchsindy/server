@@ -30,11 +30,7 @@
     <div id="image1"></div>
     <div id="image2"></div>
     <script>
-      const images = [
-        'https://covenant.nyc3.digitaloceanspaces.com/library-tv/christmas.jpg',
-        'https://covenant.nyc3.digitaloceanspaces.com/library-tv/christmas2.jpg',
-        'https://covenant.nyc3.digitaloceanspaces.com/library-tv/christmas3.jpg'
-      ]
+      const images = []
       let img1 = document.getElementById('image1')
       let img2 = document.getElementById('image2')
       let index = -1
@@ -55,7 +51,18 @@
         index = index === images.length - 1 ? 0 : index + 1
       }
       setInterval(fade, 8000)
-      fade()
-    </script>
+      fetch('https://covenant.education/spaces', {
+        method: 'POST',
+        params: {
+          directory: 'library-tv'
+        }
+      })
+        .then(response => {
+          response.json()
+            .then(files => {
+              images = files
+            })
+        })
+      </script>
   </body>
 </html>
