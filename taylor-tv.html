@@ -57,9 +57,9 @@
         headers: {
           'Content-Type': 'application/json'
         },
-        params: {
+        body: JSON.stringify({
           directory: 'taylor-tv'
-        }
+        })
       })
         .then(response => {
           response.json()
