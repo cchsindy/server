@@ -13,9 +13,9 @@ app.get('/taylor-tv', (req, res) => res.sendFile('/home/brad/server/taylor-tv.ht
 app.post('/firestore', (req, res) => {
   const fs = new FirestoreService
   fs.getAnnouncements()
-  .then(list => {
-    res.json(list)
-  })
+    .then(list => {
+      res.json(list)
+    })
 })
 app.post('/spaces', (req, res) => {
   const spaces = new SpacesService
