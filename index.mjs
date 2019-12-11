@@ -8,6 +8,7 @@ const port = 3000
 app.use(cors())
 app.use(express.json())
 app.get('/', (req, res) => res.send('Covenant Education'))
+app.get('/announcements-tv', (req, res) => res.sendFile('/Users/bradspencer/Node/server/announcements-tv.html'))
 app.get('/library-tv', (req, res) => res.sendFile('/home/brad/server/library-tv.html'))
 app.get('/taylor-tv', (req, res) => res.sendFile('/home/brad/server/taylor-tv.html'))
 app.post('/firestore', (req, res) => {

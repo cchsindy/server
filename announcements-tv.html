@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta http-equiv="refresh" content="3600" />
+    <title>Announcements</title>
+<style>
+.container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 5fr 1fr;
+  height: 100vh;
+  width: 100vw;
+}
+.announcements {
+  background: #fff;
+  grid-column: 1 / span 2;
+  grid-row: 1 / span 2;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1vw;
+  /* align-items: stretch; */
+  align-content: stretch;
+  /* justify-content: center; */
+  overflow-y: scroll;
+}
+.announcement-item {
+  color: #fff;
+  display: flex;
+  font-size: 3em;
+  flex: 1 0 25vw;
+  /* flex-basis: 25vw; */
+  /* flex-grow: 1; */
+  margin: 1vw;
+  /* max-width: 40%; */
+  opacity: 1;
+  transition: opacity 2s ease;
+  padding: 2vw;
+  text-align: center;
+  /* align-content: center; */
+  /* flex-direction: column; */
+}
+.wide {
+  /* flex-grow: 25; */
+  /* flex-basis: 50vw; */
+  flex: 1 1 auto;
+}
+.general {
+  background: #790000;
+}
+.two {
+  background: #f1e2a0;
+}
+.three {
+  background: #90badd;
+}
+.four {
+  background: #df9056;
+}
+.five {
+  background: #c89804;
+}
+.item-text {
+  /* background: #555; */
+  flex-grow: 1;
+  align-self: center;
+}
+</style>
+  </head>
+  <body>
+<div class="container">
+  <div class="announcements"></div>
+</div>
+<script>
+const announcementsDiv = document.querySelector('.announcements')
+let items = []
+
+fetch('http://localhost:3000/firestore', { // https://covenant.education/firestore
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    method: 'get-announcements'
+  })
+})
+  .then(response => {
+    response.json()
+      .then(data => {
+        for (const d of data) {
+          // TODO: check length of announcement for WIDE
+          items.push(
+            '<div class="announcement-item ' +
+              d.category +
+              '"><div class="item-text">' +
+              d.text +
+              '</div></div>'
+          )
+        }
+        fade()
+      })
+  })
+
+function fade() {
+  console.log('fade...')
+  let ans = document.querySelectorAll('.announcement-item')
+  let state = null
+  for (let a of ans) {
+    a.style.opacity = a.style.opacity == 1 ? 0 : 1
+    state = a.style.opacity == 1 ? true : false
+  }
+  if (state) {
+    setTimeout(fade, 4000)
+  } else {
+    setTimeout(displayItems, 2000)
+  }
+}
+
+function displayItems() {
+  console.log('display items...')
+  announcementsDiv.innerHTML = ''
+  let m = 0
+  let br = document.body.getBoundingClientRect()
+  for (let i = 0; i < items.length; i++) {
+    announcementsDiv.innerHTML += items[i]
+    // check bounds
+    let r = announcementsDiv.lastElementChild.getBoundingClientRect()
+    if (i === 0) m = r.top
+    if (r.bottom > br.bottom - m) {
+      announcementsDiv.lastElementChild.remove()
+      let last = items.splice(i)
+      let first = items.splice(0, i)
+      items = last.concat(first)
+      break
+    }
+  }
+  // check font size
+  let ans = document.querySelectorAll('.announcement-item')
+  let fs = 2.9
+  m = 0
+  for (let a of ans) {
+    m =
+      a.lastElementChild.getBoundingClientRect().left -
+      a.getBoundingClientRect().left
+    while (a.lastElementChild.clientHeight > a.clientHeight - m) {
+      a.style.fontSize = fs + 'em'
+      fs -= 0.1
+    }
+  }
+  fade()
+}
+</script>
+  </body>
+</html>
