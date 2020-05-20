@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.js"></script>
+    <title>Server Closet Data</title>
+  </head>
+  <body>
+    <script>
+      Date.prototype.addDays = function (days) {
+        var date = new Date(this.valueOf())
+        date.setDate(date.getDate() + days)
+        return date
+      }
+
+      let closetData = []
+
+      function setup() {
+        createCanvas(800, 500)
+        noLoop()
+        fetch('https://covenant.education/firestore', {
+          //  http://localhost:3000/firestore
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            method: 'get-closet-data',
+          }),
+        }).then((response) => {
+          response.json().then((data) => {
+            for (const d of data) {
+              const date = new Date(d.date)
+              closetData.push({
+                date,
+                temperature: d.temperature,
+                humidity: d.humidity,
+              })
+            }
+            graph()
+          })
+        })
+      }
+
+      function graph() {
+        background(175)
+        textAlign(CENTER, CENTER)
+        // draw grid
+        stroke(200)
+        for (let y = 50; y <= 450; y += 8) {
+          line(0, y, 800, y)
+        }
+        for (let x = 50; x <= 722; x += 4) {
+          if ((x - 50) % 96 === 0) line(x, 0, x, 500)
+        }
+        // draw temp scale
+        stroke(0)
+        text('degrees F', 30, 30)
+        for (let y = 50; y <= 450; y += 8) {
+          if ((y - 50) % 80 === 0) {
+            line(30, y, 50, y)
+            let t = 100
+            if (y > 50) t -= ((y - 50) / 80) * 10
+            text(t, 15, y)
+          } else {
+            line(30, y, 40, y)
+          }
+        }
+        // draw time scale
+        let now = new Date()
+        let start = now.addDays(-7)
+        for (let x = 50; x <= 722; x += 4) {
+          if ((x - 50) % 96 === 0) {
+            line(x, 450, x, 470)
+            start = start.addDays(1)
+            const month = start.getMonth() + 1
+            const day = start.getDate()
+            text(`${month}/${day}`, x, 485)
+          } else {
+            line(x, 460, x, 470)
+          }
+        }
+        // plot the temps (yellow) and humids (green)
+        let hour = closetData[0].date.getHours()
+        const minutes = closetData[0].date.getMinutes()
+        if (minutes >= 30) hour++
+        let i = 0
+        noFill()
+        stroke('yellow')
+        strokeWeight(4)
+        beginShape()
+        for (let x = 722 - (24 - hour) * 4; x >= 50; x -= 4) {
+          const y = 450 - (closetData[i].temperature - 50) * 8
+          vertex(x, y)
+          i++
+          if (i === closetData.length) break
+        }
+        endShape()
+      }
+    </script>
+  </body>
+</html>
