@@ -9,11 +9,14 @@ app.use(cors())
 app.use(express.json())
 app.get('/', (req, res) => res.send('Covenant Education'))
 app.get('/announcements-tv', (req, res) =>
-  res.sendFile('/Users/bradspencer/Node/server/announcements-tv.html')
+  res.sendFile('/Users/bradspencer/Dev/Node/server/announcements-tv.html')
 )
 app.get('/closet-data', (req, res) =>
-  // res.sendFile('/Users/bradspencer/Node/server/closet-data.html')
+  // res.sendFile('/Users/bradspencer/Dev/Node/server/closet-data.html')
   res.sendFile('/home/brad/server/closet-data.html')
+)
+app.get('/everyday-tv', (req, res) =>
+  res.sendFile('/Users/bradspencer/Dev/Node/server/everyday-tv.html')
 )
 app.get('/library-tv', (req, res) =>
   res.sendFile('/home/brad/server/library-tv.html')

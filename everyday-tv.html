@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta http-equiv="refresh" content="43200" />
+    <title>Image Fader</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        background: black;
+      }
+
+      #image1,
+      #image2 {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transition: opacity ease 0.5s;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="image1"></div>
+    <div id="image2"></div>
+    <script>
+      let images = []
+      let img1 = document.getElementById('image1')
+      let img2 = document.getElementById('image2')
+      let index = -1
+      function fade() {
+        if (img1.style.opacity == 1) {
+          img1.style.opacity = 0
+          img2.style.opacity = 1
+          setTimeout(() => {
+            const url = encodeURI(images[index])
+            img1.style.backgroundImage = `url(https://covenant.nyc3.digitaloceanspaces.com/${url})`
+          }, 1000)
+        } else {
+          img1.style.opacity = 1
+          img2.style.opacity = 0
+          setTimeout(() => {
+            const url = encodeURI(images[index])
+            img2.style.backgroundImage = `url(https://covenant.nyc3.digitaloceanspaces.com/${url})`
+          }, 1000)
+        }
+        index = index === images.length - 1 ? 0 : index + 1
+      }
+      setInterval(fade, 8000)
+      // fetch('https://covenant.education/spaces', {
+      fetch('http://localhost:3000/spaces', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          directory: 'everyday',
+        }),
+      }).then((response) => {
+        response.json().then((files) => {
+          images = files
+        })
+      })
+    </script>
+  </body>
+</html>
