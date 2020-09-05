@@ -16,7 +16,8 @@ app.get('/closet-data', (req, res) =>
   res.sendFile('/home/brad/server/closet-data.html')
 )
 app.get('/everyday-tv', (req, res) =>
-  res.sendFile('/Users/bradspencer/Dev/Node/server/everyday-tv.html')
+  // res.sendFile('/Users/bradspencer/Dev/Node/server/everyday-tv.html')
+  res.sendFile('/home/brad/server/everyday-tv.html')
 )
 app.get('/library-tv', (req, res) =>
   res.sendFile('/home/brad/server/library-tv.html')
