@@ -56,8 +56,8 @@
         index = index === images.length - 1 ? 0 : index + 1
       }
       setInterval(fade, 8000)
-      // fetch('https://covenant.education/spaces', {
-      fetch('http://localhost:3000/spaces', {
+      // fetch('http://localhost:3000/spaces', {
+      fetch('https://covenant.education/spaces', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
